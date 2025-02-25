@@ -302,7 +302,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 			return lastResponse?.result?.errorDetails && !lastResponse?.result?.errorDetails.responseIsIncomplete;
 		}));
 
-		this._codeBlockModelCollection = this._register(instantiationService.createInstance(CodeBlockModelCollection));
+		this._codeBlockModelCollection = this._register(instantiationService.createInstance(CodeBlockModelCollection, undefined));
 
 		this._register(this.configurationService.onDidChangeConfiguration((e) => {
 			if (e.affectsConfiguration('chat.renderRelatedFiles')) {
@@ -1121,13 +1121,6 @@ export class ChatWidget extends Disposable implements IChatWidget {
 					} else {
 						uniqueWorkingSetEntries.add(uri);
 						editingSessionAttachedContext.unshift(this.attachmentModel.asVariableEntry(uri, undefined, state.isMarkedReadonly));
-					}
-				}
-
-				// Then take any attachments that are not files
-				for (const attachment of this.attachmentModel.attachments) {
-					if (!URI.isUri(attachment.value)) {
-						editingSessionAttachedContext.push(attachment);
 					}
 				}
 
